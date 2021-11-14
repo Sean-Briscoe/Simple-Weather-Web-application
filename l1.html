@@ -1,0 +1,76 @@
+11/4/21, 6:50 PM ClientSide.html
+localhost:4649/?mode=htmlmixed 1/2
+<!-- development version, includes helpful console warnings -->
+<html>
+  <body>
+    <div id="app1">
+      <h1>Weather Forecast App</h1>
+       Please enter the name of the City as well as the area code(e.g IE forIreland)
+      <br>
+        City<input v-model="city"> Area Code<input v-model="areaCode">
+      <br><br>
+      <button v-on:click="search">Search</button>
+      City {{city}} AreaCode {{areaCode}}
+      <br> <br>
+      <h1>Forecast for the coming days:</h1>
+      <div v-if="rain">Bring a Umbrella it's going to rain!</div>
+      <div v-if="pollution">Bring a mask there is pollution in the air!</div>
+      <div>
+        {{warm}}
+      </div>
+      <br></br>
+      <span>    
+      The weather for the next five days looks: {{forecast}}
+      <br></br>
+      Temperatures for the next five days are: {{temperature}}
+      <br></br>
+      Wind speeds for the next five days are: {{windspeed}}
+      <br></br>
+      Rain levels for the next five days are: {{rainFall}}
+      </span>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    new Vue({
+        el:'#app1',
+        data:{
+        city:'',
+        areaCode: '',
+        hottest: '',
+        coldest: '',
+        windspeed:'',
+        forecast: '',
+        rain: '',
+        rainFall: '',
+        pollution: '',
+        count: '',
+        warm:'',
+        temperature:''},
+        
+        methods:{
+        search: getRandom }
+          })
+function getRandom (){
+ console.log("Weather called")
+
+
+let prom = fetch("/weather/"+this.city+"/"+this.areaCode)
+ prom.then( response => response.json())
+ .then (response =>
+      { 
+      this.temperature = response.temperature
+      this.hottest = response.Hottest
+      this.coldest = response.Coldest
+      this.windspeed = response.Windspeeds
+      this.forecast = response.Forecast
+      this.rain = response.Rain;
+      this.pollution = response.Pollution
+      this.warm = response.Heat
+      this.pollution = response.Polluted
+      this.rainFall = response.Rainfall
+ })}
+</script>
+</body>
+</html>
